@@ -18,32 +18,37 @@ class Board:
         self.drawPieces(screen)
 
     def initPieces(self):
-        pieceList = [[None for i in range(8)] for j in range(8)]
-        pieceList[0][0] = Piece(PieceType.rook, PieceColor.black, self.getFieldSize(), 0, 0)
-        pieceList[0][1] = Piece(PieceType.knight, PieceColor.black, self.getFieldSize(), 0, 1)
-        pieceList[0][2] = Piece(PieceType.bishop, PieceColor.black, self.getFieldSize(), 0, 2)
-        pieceList[0][3] = Piece(PieceType.queen, PieceColor.black, self.getFieldSize(), 0, 3)
-        pieceList[0][4] = Piece(PieceType.king, PieceColor.black, self.getFieldSize(), 0, 4)
-        pieceList[0][5] = Piece(PieceType.bishop, PieceColor.black, self.getFieldSize(), 0, 5)
-        pieceList[0][6] = Piece(PieceType.knight, PieceColor.black, self.getFieldSize(), 0, 6)
-        pieceList[0][7] = Piece(PieceType.rook, PieceColor.black, self.getFieldSize(), 0, 7)
-        pieceList[1][0] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 0)
-        pieceList[1][1] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 1)
-        pieceList[1][2] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 2)
-        pieceList[1][3] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 3)
-        pieceList[1][4] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 4)
-        pieceList[1][5] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 5)
-        pieceList[1][6] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 6)
-        pieceList[1][7] = Piece(PieceType.pawn, PieceColor.black, self.getFieldSize(), 1, 7)
+        pieceList = Board.getBlankBoard()
+        pieceList[0][0] = Piece.pieceFromString('br', self.getFieldSize(), 0, 0)
+        pieceList[0][1] = Piece.pieceFromString('bb', self.getFieldSize(), 0, 1)
+        pieceList[0][2] = Piece.pieceFromString('bn', self.getFieldSize(), 0, 2)
+        pieceList[0][3] = Piece.pieceFromString('bk', self.getFieldSize(), 0, 3)
+        pieceList[0][4] = Piece.pieceFromString('bq', self.getFieldSize(), 0, 4)
+        pieceList[0][5] = Piece.pieceFromString('bn', self.getFieldSize(), 0, 5)
+        pieceList[0][6] = Piece.pieceFromString('bb', self.getFieldSize(), 0, 6)
+        pieceList[0][7] = Piece.pieceFromString('br', self.getFieldSize(), 0, 7)
+        pieceList[7][0] = Piece.pieceFromString('wr', self.getFieldSize(), 7, 0)
+        pieceList[7][1] = Piece.pieceFromString('wb', self.getFieldSize(), 7, 1)
+        pieceList[7][2] = Piece.pieceFromString('wn', self.getFieldSize(), 7, 2)
+        pieceList[7][3] = Piece.pieceFromString('wk', self.getFieldSize(), 7, 3)
+        pieceList[7][4] = Piece.pieceFromString('wq', self.getFieldSize(), 7, 4)
+        pieceList[7][5] = Piece.pieceFromString('wn', self.getFieldSize(), 7, 5)
+        pieceList[7][6] = Piece.pieceFromString('wb', self.getFieldSize(), 7, 6)
+        pieceList[7][7] = Piece.pieceFromString('wr', self.getFieldSize(), 7, 7)
+        for i in range(0,8):
+            pieceList[1][i] = Piece.pieceFromString('bp', self.getFieldSize(), 1, i)
+            pieceList[6][i] = Piece.pieceFromString('wp', self.getFieldSize(), 6, i)
         return pieceList
 
     def drawPieces(self, screen):
         for i in self.board:
             for j in i:
                 if j is None:
-                    return
-                screen.blit(j.image, j.rect)
-                
+                    continue
+                screen.blit(j.image, j.rect)        
 
     def getFieldSize(self):
         return self.gridsize / 8
+
+    def getBlankBoard():
+        return [[None for i in range(8)] for j in range(8)]

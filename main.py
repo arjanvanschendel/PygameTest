@@ -15,6 +15,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            currentBoard.handleClick(pos)
 
     screen.fill((150, 150, 150))
     currentBoard.drawBoard(screen)

@@ -28,13 +28,21 @@ class Piece(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load(self.getImageForType()), (size, size))
         self.rect = self.image.get_rect()
         self.rect.topleft = [x * size, y * size]
+        self.selected = False
+        self.hasMoved = False
 
 
     def update(self):
         pass
 
-    def setPos(self, pos):
+    def setPosYX(self, pos):
         self.rect.topleft = pos
+    
+    def setPos(self, pos):
+        self.setPosYX((pos[1], pos[0]))
+
+    def onClick(self):
+        self.selected = not self.selected
 
     def typeFromChar(c: string):
         match c.lower():

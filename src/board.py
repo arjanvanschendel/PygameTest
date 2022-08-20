@@ -4,6 +4,7 @@ from typing import List
 import pygame
 
 from piece import Piece, PieceColor, PieceType
+from translator import coordsToName
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -132,7 +133,7 @@ class Board:
             pygame.draw.circle(screen, (125,125,125), pos, 10, 0)
 
     def findPossibleMoves(self, piece, fromPos):
-        pieceMoves = Board.findPieceMoves(piece, fromPos)
+        pieceMoves = self.findPieceMoves(piece, fromPos)
         possiblePieceMoves = pieceMoves
         for move in pieceMoves:
             # Can't move outside the board
@@ -145,7 +146,7 @@ class Board:
                     possiblePieceMoves.remove(move)
         return possiblePieceMoves
 
-    def findPieceMoves(piece: Piece, fromPos: tuple[int, int]):
+    def findPieceMoves(self, piece: Piece, fromPos: tuple[int, int]):
         possibleMoves = []
         moveDirectionMultiplier = 1 if piece.color == PieceColor.black else -1
         match piece.type:
@@ -153,11 +154,7 @@ class Board:
                 possibleMoves.append([fromPos[0], fromPos[1] + moveDirectionMultiplier])
                 if not piece.hasMoved: possibleMoves.append([fromPos[0], fromPos[1] + 2 * moveDirectionMultiplier])
             case PieceType.rook:
-                for i in range(0,8):
-                    if i is not fromPos[1]:
-                        possibleMoves.append([fromPos[0], i])
-                    if i is not fromPos[0]:
-                        possibleMoves.append([i, fromPos[1]])
+                possibleMoves.extend(self.getRookMoves(fromPos, piece.color))
             case PieceType.knight:
                 distances = [-2, -1, 1, 2]
                 for i in distances:
@@ -187,6 +184,56 @@ class Board:
                     possibleMoves.append([fromPos[0] - i, fromPos[1] + i])
 
         return possibleMoves
+
+    def getRookMoves(self, fromPos, color):
+        x, y = fromPos
+        legalMoves = []
+
+        # Get moves to the left
+        counter = x + 1
+        blocked = False
+        while counter < 8 and not blocked:
+            if(self.board[x][counter] is None):
+                legalMoves.append([x, counter])
+            elif(self.board[x][counter].color is not color):
+                legalMoves.append([x, counter])
+            blocked = True
+            counter += 1
+
+        # Get moves above
+        counter = y + 1
+        blocked = False
+        while counter < 8 and not blocked:
+            if(self.board[counter][y] is None):
+                legalMoves.append([counter, y])
+            elif(self.board[counter][y].color is not color):
+                legalMoves.append([counter, y])
+            blocked = True  
+            counter += 1               
+
+        # Get moves to the right
+        counter = x - 1
+        blocked = False
+        while counter > 0 and not blocked:
+            if(self.board[x][counter] is None):
+                legalMoves.append([x, counter])
+            elif(self.board[x][counter].color is not color):
+                legalMoves.append([x, counter])
+            blocked = True
+            counter -= 1
+
+        # Get moves below
+        counter = y - 1
+        blocked = False
+        while counter < 8 and not blocked:
+            if(self.board[counter][y] is None):
+                legalMoves.append([counter, y])
+            elif(self.board[counter][y].color is not color):
+                legalMoves.append([counter, y])
+            blocked = True
+            counter -= 1
+
+        return legalMoves
 
     def getFieldSize(self):
         return self.gridsize / 8

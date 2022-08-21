@@ -3,8 +3,7 @@ import math
 from typing import List
 import pygame
 
-from piece import Piece, PieceColor, PieceType
-from translator import coordsToName
+from .piece import Piece, PieceColor, PieceType
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -191,47 +190,51 @@ class Board:
 
         # Get moves to the left
         counter = x + 1
-        blocked = False
-        while counter < 8 and not blocked:
-            if(self.board[x][counter] is None):
+        while counter < 8:
+            currentSquare = self.board[x][counter]
+            if(currentSquare is None):
                 legalMoves.append([x, counter])
-            elif(self.board[x][counter].color is not color):
+                counter += 1
+                continue
+            elif(currentSquare.color is not color):
                 legalMoves.append([x, counter])
-            blocked = True
-            counter += 1
+            break
 
         # Get moves above
         counter = y + 1
-        blocked = False
-        while counter < 8 and not blocked:
-            if(self.board[counter][y] is None):
+        while counter < 8:
+            currentSquare = self.board[counter][y]
+            if(currentSquare is None):
                 legalMoves.append([counter, y])
-            elif(self.board[counter][y].color is not color):
+                counter += 1
+                continue
+            elif(currentSquare.color is not color):
                 legalMoves.append([counter, y])
-            blocked = True  
-            counter += 1               
+            break       
 
         # Get moves to the right
         counter = x - 1
-        blocked = False
-        while counter > 0 and not blocked:
-            if(self.board[x][counter] is None):
+        while counter >= 0:
+            currentSquare = self.board[x][counter]
+            if(currentSquare is None):
                 legalMoves.append([x, counter])
-            elif(self.board[x][counter].color is not color):
+                counter -= 1
+                continue
+            elif(currentSquare.color is not color):
                 legalMoves.append([x, counter])
-            blocked = True
-            counter -= 1
+            break
 
         # Get moves below
         counter = y - 1
-        blocked = False
-        while counter < 8 and not blocked:
-            if(self.board[counter][y] is None):
+        while counter >= 0:
+            currentSquare = self.board[counter][y]
+            if(currentSquare is None):
                 legalMoves.append([counter, y])
-            elif(self.board[counter][y].color is not color):
+                counter -= 1
+                continue
+            elif(currentSquare.color is not color):
                 legalMoves.append([counter, y])
-            blocked = True
-            counter -= 1
+            break
 
         return legalMoves
 
